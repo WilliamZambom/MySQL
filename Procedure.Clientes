@@ -1,0 +1,26 @@
+USE locadora
+DELIMITER //
+
+CREATE PROCEDURE PopularClientes(IN quantidade INT)
+BEGIN
+  DECLARE i INT DEFAULT 1;
+  
+  WHILE i <= quantidade DO
+    INSERT INTO Cliente (cpf, pnome, snome, telefone, email, cnh)
+    VALUES (
+      LPAD(FLOOR(RAND() * 99999999999), 11, '0'),  
+      CONCAT('Nome', i),
+      CONCAT('Sobrenome', i),
+      CONCAT('(11)9', LPAD(FLOOR(RAND()*10000000), 7, '0')),
+      CONCAT('cliente', i, '@exemplo.com'),
+      LPAD(FLOOR(RAND() * 99999999999), 11, '0')   
+    );
+    SET i = i + 1;
+  END WHILE;
+END;
+//
+
+DELIMITER ;
+
+CALL PopularClientes(50);
+
