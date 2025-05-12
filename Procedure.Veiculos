@@ -1,0 +1,30 @@
+DELIMITER //
+CREATE PROCEDURE PopularVeiculos(IN quantidade INT)
+BEGIN
+  DECLARE i INT DEFAULT 1;
+  DECLARE letras CHAR(3);
+  DECLARE numeros CHAR(4);
+
+  WHILE i <= quantidade DO
+    SET letras = CONCAT(
+      CHAR(65 + FLOOR(RAND()*26)),
+      CHAR(65 + FLOOR(RAND()*26)),
+      CHAR(65 + FLOOR(RAND()*26))
+    );
+    SET numeros = LPAD(FLOOR(RAND()*10000), 4, '0');
+
+    INSERT IGNORE INTO veiculo (placa, modelo, ano, tipo, km, status)
+    VALUES (
+      CONCAT(letras, numeros),
+      CONCAT('Modelo', i),
+      2010 + MOD(i, 13),
+      ELT(1 + FLOOR(RAND() * 3), 'CARRO', 'MOTO', 'VAN'),
+      FLOOR(RAND() * 100000),
+      ELT(1 + FLOOR(RAND() * 3), 'Disponível', 'Alugado', 'Manutenção')
+    );
+
+    SET i = i + 1;
+  END WHILE;
+END;
+//
+DELIMITER ;
