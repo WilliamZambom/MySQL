@@ -1,0 +1,33 @@
+DELIMITER //
+
+CREATE PROCEDURE PopularAlugueis(IN quantidade INT)
+BEGIN
+  DECLARE i INT DEFAULT 1;
+  DECLARE cliente_id INT;
+  DECLARE veiculo_id INT;
+  DECLARE retirada DATE;
+  DECLARE devolucao DATE;
+  DECLARE valor DECIMAL(10,2);
+
+  WHILE i <= quantidade DO
+    SET cliente_id = FLOOR(1 + RAND() * 10);
+    SET veiculo_id = FLOOR(1 + RAND() * 10);
+    SET retirada = DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*30) DAY);
+    SET devolucao = DATE_ADD(retirada, INTERVAL FLOOR(RAND()*10)+1 DAY);
+    SET valor = ROUND(RAND() * 800 + 100, 2);
+
+    INSERT INTO aluguel (id_cliente, id_veiculo, data_retirada, data_prev_devolucao, valor_total)
+    VALUES (
+      cliente_id,
+      veiculo_id,
+      retirada,
+      devolucao,
+      valor
+    );
+
+    SET i = i + 1;
+  END WHILE;
+END;
+//
+
+DELIMITER ;
