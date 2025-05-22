@@ -30,5 +30,3 @@ END;
 //
 
 DELIMITER ;
-
-CALL PopularManutencoes(100);
