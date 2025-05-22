@@ -23,7 +23,7 @@ BEGIN
       'Mendes', 'Campos', 'Vieira', 'Freitas', 'Ramos');
 
     -- Inserção
-    INSERT INTO Cliente (cpf, pnome, snome, telefone, email, cnh)
+    INSERT IGNORE INTO cliente(cpf, pnome, snome, telefone, email, cnh)
     VALUES (
       LPAD(FLOOR(RAND() * 99999999999), 11, '0'),
       primeiro_nome,
