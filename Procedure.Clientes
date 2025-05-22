@@ -1,26 +1,40 @@
-USE locadora
 DELIMITER //
 
 CREATE PROCEDURE PopularClientes(IN quantidade INT)
 BEGIN
   DECLARE i INT DEFAULT 1;
-  
+  DECLARE primeiro_nome VARCHAR(50);
+  DECLARE sobrenome VARCHAR(50);
+
   WHILE i <= quantidade DO
+
+    -- Seleciona nome aleatório
+    SET primeiro_nome = ELT(FLOOR(1 + RAND() * 20),
+      'Ana', 'Bruno', 'Camila', 'Daniel', 'Elisa',
+      'Felipe', 'Gabriela', 'Henrique', 'Isabela', 'João',
+      'Karen', 'Lucas', 'Mariana', 'Nicolas', 'Olivia',
+      'Paulo', 'Renata', 'Sabrina', 'Thiago', 'Vinicius');
+
+    -- Seleciona sobrenome aleatório
+    SET sobrenome = ELT(FLOOR(1 + RAND() * 20),
+      'Silva', 'Santos', 'Oliveira', 'Almeida', 'Ferreira',
+      'Souza', 'Martins', 'Lima', 'Rodrigues', 'Barbosa',
+      'Azevedo', 'Moreira', 'Cardoso', 'Dias', 'Rocha',
+      'Mendes', 'Campos', 'Vieira', 'Freitas', 'Ramos');
+
+    -- Inserção
     INSERT INTO Cliente (cpf, pnome, snome, telefone, email, cnh)
     VALUES (
-      LPAD(FLOOR(RAND() * 99999999999), 11, '0'),  
-      CONCAT('Nome', i),
-      CONCAT('Sobrenome', i),
-      CONCAT('(11)9', LPAD(FLOOR(RAND()*10000000), 7, '0')),
-      CONCAT('cliente', i, '@exemplo.com'),
-      LPAD(FLOOR(RAND() * 99999999999), 11, '0')   
+      LPAD(FLOOR(RAND() * 99999999999), 11, '0'),
+      primeiro_nome,
+      sobrenome,
+      CONCAT('(11)9', LPAD(FLOOR(RAND() * 10000000), 7, '0')),
+      CONCAT(LOWER(primeiro_nome), '.', LOWER(sobrenome), i, '@exemplo.com'),
+      LPAD(FLOOR(RAND() * 99999999999), 11, '0')
     );
+
     SET i = i + 1;
   END WHILE;
 END;
 //
-
 DELIMITER ;
-
-CALL PopularClientes(50);
-
