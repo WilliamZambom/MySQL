@@ -1,11 +1,23 @@
 DELIMITER //
+
 CREATE PROCEDURE PopularVeiculos(IN quantidade INT)
 BEGIN
   DECLARE i INT DEFAULT 1;
   DECLARE letras CHAR(3);
   DECLARE numeros CHAR(4);
+  DECLARE tipo_veiculo ENUM('CARRO','MOTO','VAN');
+  DECLARE modelo_nome VARCHAR(50);
 
   WHILE i <= quantidade DO
+    SET tipo_veiculo = ELT(1 + FLOOR(RAND() * 3), 'CARRO', 'MOTO', 'VAN');
+
+    -- Modelos reais baseados no tipo
+    SET modelo_nome = CASE tipo_veiculo
+      WHEN 'CARRO' THEN ELT(1 + FLOOR(RAND()*5), 'Gol', 'Onix', 'Ka', 'Civic', 'Corolla')
+      WHEN 'MOTO' THEN ELT(1 + FLOOR(RAND()*5), 'CG 160', 'Fazer 250', 'XRE 300', 'Bros 160', 'MT-03')
+      WHEN 'VAN' THEN ELT(1 + FLOOR(RAND()*5), 'Ducato', 'Sprinter', 'Master', 'Bongo', 'HR')
+    END;
+
     SET letras = CONCAT(
       CHAR(65 + FLOOR(RAND()*26)),
       CHAR(65 + FLOOR(RAND()*26)),
@@ -16,9 +28,9 @@ BEGIN
     INSERT IGNORE INTO veiculo (placa, modelo, ano, tipo, km, status)
     VALUES (
       CONCAT(letras, numeros),
-      CONCAT('Modelo', i),
+      modelo_nome,
       2010 + MOD(i, 13),
-      ELT(1 + FLOOR(RAND() * 3), 'CARRO', 'MOTO', 'VAN'),
+      tipo_veiculo,
       FLOOR(RAND() * 100000),
       ELT(1 + FLOOR(RAND() * 3), 'Disponível', 'Alugado', 'Manutenção')
     );
@@ -27,4 +39,5 @@ BEGIN
   END WHILE;
 END;
 //
+
 DELIMITER ;
