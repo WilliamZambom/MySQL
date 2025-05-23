@@ -1,0 +1,32 @@
+-- Codigo do trigger com os inserts de teste.
+
+DELIMITER //
+CREATE TRIGGER atualizar_status_veiculo
+AFTER INSERT ON aluguel
+FOR EACH ROW
+BEGIN
+  UPDATE veiculo
+  SET status = 'Alugado'
+  WHERE id_veiculo = NEW.id_veiculo;
+END;
+//
+DELIMITER ;
+
+INSERT INTO veiculo (placa, modelo, ano, tipo, km, status)
+VALUES ('ABC1234', 'Fiat Uno', 2020, 'CARRO', 50000, 'Disponível');
+
+INSERT INTO cliente (cpf, pnome, snome, telefone, email, cnh)
+VALUES ('12345678900', 'João', 'Silva', '(11)91234-5678', 'joao.silva@email.com', '98765432100');
+
+SELECT id_veiculo, status FROM veiculo WHERE placa = 'ABC1234';
+
+SELECT id_cliente FROM cliente WHERE cpf = '12345678900';
+-- ID 21692
+
+SELECT id_veiculo FROM veiculo WHERE placa = 'ABC1234';
+-- ID 201
+
+INSERT INTO aluguel (id_cliente, id_veiculo, data_retirada, data_prev_devolucao, valor_total)
+VALUES (21692, 201, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 5 DAY), 500.00);
+
+SELECT id_veiculo, status FROM veiculo WHERE id_veiculo = 201;
