@@ -1,6 +1,0 @@
--- Total de aluguel por cliente
-SELECT CONCAT(c.pnome, ' ', c.snome) AS nome_completo, COUNT(a.id_aluguel) AS total_alugueis  
-FROM cliente c 
-JOIN aluguel a ON c.id_cliente = a.id_cliente  
-GROUP BY c.id_cliente 
-ORDER BY total_alugueis DESC; 

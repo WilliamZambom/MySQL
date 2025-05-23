@@ -1,0 +1,17 @@
+-- Total de aluguel por cliente
+SELECT CONCAT(c.pnome, ' ', c.snome) AS nome_completo, COUNT(a.id_aluguel) AS total_alugueis  
+FROM cliente c 
+JOIN aluguel a ON c.id_cliente = a.id_cliente  
+GROUP BY c.id_cliente 
+ORDER BY total_alugueis DESC; 
+
+SELECT
+  c.email,
+  CONCAT(c.pnome, ' ', c.snome) AS nome,
+  COUNT(a.id_aluguel) AS total_alugueis,
+  SUM(p.valor_pago) AS total_pago
+FROM cliente c
+JOIN aluguel a ON c.id_cliente = a.id_cliente
+JOIN pagamento p ON a.id_aluguel = p.id_aluguel
+WHERE c.email = 'camila.ramos10@exemplo.com'
+GROUP BY c.id_cliente;
